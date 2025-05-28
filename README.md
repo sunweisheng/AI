@@ -1,2 +1,5 @@
-# AI
-学习AI相关内容
+# 学习AI相关知识
+
+目录
+
+* [Ollama](Ollama.md)

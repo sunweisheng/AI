@@ -43,6 +43,18 @@ ollama rm 模型名称
 ollama run qwen3
 ````
 
+在Ubuntu中运行ollama
+````shell
+# 需要先启动服务
+ollama serve
+````
+有两个启动参数：
+OLLAMA_HOST：默认是127.0.0.1:11434只能被本机访问，改成0.0.0.0:11434就能被其他设备访问了。
+OLLAMA_KEEP_ALIVE：如果5分钟不用ollama模型就会被卸载，可以改成-1避免这个问题。
+````shell
+OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=-1 ollama serve
+````
+
 ## 测试运行模型速度
 
 ````shell
@@ -97,8 +109,6 @@ eval rate:            16.69 tokens/s
 ollama run qwen3 --verbose
 
 # Mac min M2 16G 回答问题时统一内存占用4.5G左右
-
-
 total duration:       15.315935417s
 load duration:        33.100459ms
 prompt eval count:    17 token(s)
@@ -107,4 +117,41 @@ prompt eval rate:     23.94 tokens/s
 eval count:           250 token(s)
 eval duration:        14.571133792s
 eval rate:            17.16 tokens/s
+````
+
+在Ubuntu中监控显卡使用情况可以用：
+````shell
+# 1秒刷新一次
+watch -n 1 nvidia-smi
+# 36核 128G内存 3090 24G显卡，qwen3 8B Q4量化版本回答问题时显存6.67G
+ollama run qwen3 --verbose
+
+total duration:       3.120056433s
+load duration:        80.897589ms
+prompt eval count:    18 token(s)
+prompt eval duration: 311.190413ms
+prompt eval rate:     57.84 tokens/s
+eval count:           249 token(s)
+eval duration:        2.726602382s
+eval rate:            91.32 tokens/s
+
+# 再试试其他模型
+ollama list
+NAME            ID              SIZE      MODIFIED     
+qwen3:30b       0b28110b7a33    18 GB     23 hours ago    
+qwen3:32b       030ee887880f    20 GB     23 hours ago    
+qwen3:14b       bdbd181c33f2    9.3 GB    24 hours ago    
+qwen3:latest    500a1f067a9f    5.2 GB    26 hours ago
+
+# 36核 128G内存 3090 24G显卡，qwen3 32B Q4回答问题时显存20.7G
+ollama run qwen3:32b --verbose
+
+total duration:       11.292684395s
+load duration:        108.30065ms
+prompt eval count:    18 token(s)
+prompt eval duration: 248.86851ms
+prompt eval rate:     72.33 tokens/s
+eval count:           351 token(s)
+eval duration:        10.934249156s
+eval rate:            32.10 tokens/s
 ````

@@ -11,10 +11,4 @@ train_y = train[:,1]
 
 # 绘图
 plt.plot(train_x, train_y,'o')
-
-# 随便给参与定义值之后画直线用于演示误差
-theta_0 = 1
-theta_1 = 2
-y = theta_0 + theta_1 * train_x
-plt.plot(train_x, y, label='f(x) = 1 + 2x')
 plt.show()

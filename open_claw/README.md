@@ -7,3 +7,4 @@
 * [USER文件](USER.md)
 * [AGENTS文件](AGENTS.md)
 * [TOOLS文件](TOOLS.md)
+* [MEMORY文件](MEMORY.md)

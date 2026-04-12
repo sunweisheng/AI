@@ -263,3 +263,39 @@ ssh -N -L 18789:127.0.0.1:18789 ubuntu@192.168.2.4
 现在你可以回到[飞书开发平台](https://open.feishu.cn/?lang=zh-CN)，在事件订阅方式中配置长链接并保存，再重新发布一个机器人版本，发布成功之后你就可以在飞书中将机器人和你加到一个群里，你@机器人，机器人就会回答你：
 ![编写工具查询Web信息](./images/oc4.png)  
 目前Open Claw基础配置都完成了，你可以探索更有趣的使用方法。
+
+# Multipass备份和恢复
+
+## 快照 (Snapshot)
+快照是 Multipass 中最常用、最便捷的备份方式，用于保存实例在某一时刻的完整状态。它非常适合在进行重大系统更改或软件安装前创建一个还原点。
+### 创建快照
+为指定实例创建一个快照，并为其命名，创建快照之前需要关闭实例（Stop状态）。
+````shell
+multipass snapshot <instance-name> --name <snapshot-name>
+# 例如：为 devbox 实例创建一个名为 'backup-before-update' 的快照
+multipass snapshot devbox --name backup-before-update
+````
+### 列出快照
+查看所有快照。
+````shell
+multipass list --snapshots
+````
+
+### 恢复快照
+将实例恢复到指定快照时的状态，虚拟机需要是Stop状态。
+````shell
+multipass restore <instance-name>.<snapshot-name>
+# 例如：将 devbox 实例恢复到 'backup-before-update' 的状态
+multipass restore devbox.backup-before-update
+````
+
+## 实例克隆 (Clone)
+克隆功能可以创建一个现有实例的完整副本。这可以作为另一种形式的备份，或者用于快速复制一个配置好的开发环境。
+
+### 克隆实例
+基于一个现有实例创建一个新的、独立的实例。在执行克隆操作前，必须先停止源实例，以确保数据一致性。
+````shell
+multipass clone <source-instance> --name <new-instance-name>
+# 例如：将 devbox 实例克隆为 devbox-backup
+multipass clone devbox --name box-backup 
+````
